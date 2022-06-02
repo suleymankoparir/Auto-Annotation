@@ -35,7 +35,8 @@ class Detect():
         category_index = label_map_util.create_category_index_from_labelmap(files['LABELMAP'])
         def auto_annotate(filepath,item):
             img = cv2.imread(filepath+item)
-            height, width, _ = img.shape
+            height=img.shape[0]
+            width=img.shape[1]
             image_np = np.array(img)
             input_tensor = tf.convert_to_tensor(np.expand_dims(image_np, 0), dtype=tf.float32)
             detections = detect_fn(input_tensor)

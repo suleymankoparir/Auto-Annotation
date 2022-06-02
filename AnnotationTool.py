@@ -3,12 +3,23 @@ import os
 import copy
     
 class AnnotationTool:  
-    def changeAnnotationFile(self,label,filename,path):
+    def changeAnnotationTitle(self,label,filename,path,index):
         mytree = ET.parse(path+filename.split('.')[0]+'.xml')
         myroot = mytree.getroot()
+        object_count=0
         for lbl in myroot.iter('name'):
             if lbl.text!='' and lbl.text!=None and lbl.text!='rotation':
-                lbl.text=label
+                object_count+=1
+        
+        index=object_count-index-1
+        object_count=0
+        for lbl in myroot.iter('name'):
+            if lbl.text!='' and lbl.text!=None and lbl.text!='rotation':
+                if object_count==index:
+                    lbl.text=label
+                    break
+                else:
+                    object_count+=1
             #break;#multiple name space
         mytree.write(path+filename.split('.')[0]+'.xml')
     def addObject(self,annXmin,annYmin,annXmax,annYmax,label,filename,path):
@@ -39,7 +50,7 @@ class AnnotationTool:
     def createAnnotationFile(self,annW,annH,annXmin,annYmin,annXmax,annYmax,label,filename,path):
         mytree = ET.parse('template.xml')
         myroot = mytree.getroot()
-        
+        #print(annW,annH)
         for lbl in myroot.iter('name'):
             lbl.text=label
             break;#multiple name space
