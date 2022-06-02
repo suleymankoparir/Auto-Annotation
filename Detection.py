@@ -78,7 +78,7 @@ class Detect():
                         'ymax':detected_object_ymax,
                         'width':width,
                         'height':height,
-                        'image':cv2.cvtColor(image_np_with_detections, cv2.COLOR_BGR2RGB),
+                        'image':cv2.cvtColor(image_np, cv2.COLOR_BGR2RGB),
                         'filepath':filepath,
                         'name':item
                         }
@@ -92,8 +92,8 @@ class Detect():
                         'ymax':0,
                         'width':width,
                         'height':height,
-                        'image':cv2.cvtColor(image_np_with_detections, cv2.COLOR_BGR2RGB),
-                        'filepath':'',
+                        'image':cv2.cvtColor(image_np, cv2.COLOR_BGR2RGB),
+                        'filepath':filepath,
                         'name':item
                         }
                     detected_objects.append(detected_object)
@@ -124,6 +124,6 @@ class Detect():
         items=os.listdir(IMAGE_FOLDER_PATH)
         detected_objects_list_f=[]
         for item in items:
-            if(item[-4:]=='.jpg'):
+            if(item[-4:]=='.jpg' or item[-5:]=='.jpeg'or item[-4:]=='.png'):
                 detected_objects_list_f.append(auto_annotate(IMAGE_FOLDER_PATH,item))
         return detected_objects_list_f

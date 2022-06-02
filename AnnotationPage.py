@@ -64,15 +64,15 @@ class AnnotationPage:
                         )
         def dropbox_changed(*args):
             global selected_image
+            rectangleManagement.title=dropbox_option.get()
             if rectangleManagement.selected_rect!=None:
                 if len(detected_objects_list[selected_image])>rectangleManagement.selected_index:
-                    detected_objects_list[selected_image][rectangleManagement.selected_index]['title']=dropbox_option.get()
-                
-                rectangleManagement.title=dropbox_option.get()
+                    detected_objects_list[selected_image][rectangleManagement.selected_index]['title']=dropbox_option.get()    
                 rectangleManagement.change_title()
                 filename=detected_objects_list[selected_image][0]['name'].split('.')[0]
                 if os.path.exists(image+filename+'.xml'):
                     annotationTool.changeAnnotationTitle(dropbox_option.get().split('\n')[0] ,detected_objects_list[selected_image][0]['name'], detected_objects_list[selected_image][0]['filepath'],rectangleManagement.selected_index)
+            
         def change_image(index):
             rectangleManagement.delete_all()
             if index==-1:
@@ -144,16 +144,19 @@ class AnnotationPage:
             rectangleManagement.delete_all()
             global selected_image
             filename=detected_objects_list[selected_image][0]['name'].split('.')[0]
-            if os.path.exists(image+filename+'.jpg'):
-                os.remove(image+filename+'.jpg')
+            filetype=detected_objects_list[selected_image][0]['name'].split('.')[1]
+            if os.path.exists(image+filename+'.'+filetype):
+                os.remove(image+filename+'.'+filetype)
             if os.path.exists(image+filename+'.xml'):
                 os.remove(image+filename+'.xml')
             detected_objects_list.remove(detected_objects_list[selected_image])
             if len(detected_objects_list)==1:
                 change_image(0)
             else:
-                selected_image-=1
-                right_fn()
+                if len(detected_objects_list)==0:
+                    change_image(-1)
+                elif(selected_image!=len(detected_objects_list)-1):
+                    change_image(selected_image)
         button_delete=Button(frame_left,text="Delete Image",command=delete_fn,width=20,fg=text_color,bg=button_color)
         button_delete.pack(anchor=S,pady=10)
         
